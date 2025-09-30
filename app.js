@@ -21,7 +21,7 @@ app.post("/print-label", async (req, res) => {
   const { productName, manufactureDate, expiryDate, barcode, labelSize, printerName } = req.body;
 
   if (!productName || !manufactureDate || !expiryDate || !barcode || !labelSize || !printerName) {
-    return res.status(400).send("필드 누락: productName, manufactureDate, expiryDate, barcode, labelSize, printerName 필요");
+    return res.status(400).send("필드 누락");
   }
 
   try {
@@ -73,7 +73,7 @@ app.post("/print-label", async (req, res) => {
     // 임시 PDF 삭제
     fs.unlinkSync(pdfPath);
 
-    res.send("✅ 라벨이 프린터로 출력되었습니다!");
+    res.send("라벨이 프린터로 출력되었습니다!");
 
   } catch (err) {
     console.error(err);
@@ -82,5 +82,5 @@ app.post("/print-label", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("✅ 서버 실행중: http://localhost:3000");
+  console.log("서버 실행중: http://localhost:3000");
 });
