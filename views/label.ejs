@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>라벨</title>
+    <style>
+                  @page {
+                    size: <%= labelSize === 'large' ? '100mm 100mm' : labelSize === 'medium' ? '80mm 60mm' : '50mm 30mm' %>;
+                    margin: 0;
+                  }
+                  body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Nanum Gothic', sans-serif;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                  }
+                  .label-content {
+              width: 100%;
+              height: 100%;
+              justify-content: center; /* 수평 중앙 */
+              align-items: center;     /* 수직 중앙 */
+              text-align: center;
+            }
+
+                  h1, h3, p {
+                    margin: 2px 0;
+                  }
+                  h3 {
+                    transform: rotate(270deg); /* 90도 회전 */
+                    transform-origin: center center; /* 회전 중심점 지정 (기본값) */
+                  }
+                  img.barcode {
+                    max-width: 90%;
+                    max-height: 50%;
+                    margin-top: 4px;
+                  }
+                  .barcode-text {
+                    font-size: 6pt;
+                  }
+                  .small-label {
+                    display: flex;
+                    flex-flow: column;
+                  }
+                  .small-label-container {
+                    display: flex;
+                    flex-flow: column;
+                  }
+                  .medium-label {
+                    margin-top: 5rem;
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="label-content">
+      <% if (labelSize === 'large') { %>
+      <h1><%= productName %></h1>
+      <p>제조일자: <%= manufactureDate %></p>
+      <p>유통기한: <%= expiryDate %></p>
+      <p>등록번호: 제III RAX0009호</p>
+      <p>성분량: 조단백질 36% 이상...</p>
+      <p>주의사항: 반려동물 이외에는 급여하지 마십시오.</p>
+      <img
+        class="barcode"
+        src="data:image/png;base64,<%= barcodeBase64 %>"
+        alt="Barcode"
+      />
+      <% } else if (labelSize === 'medium') { %>
+      <div class="medium-label">
+        <h3><%= productName %></h3>
+        <img
+          class="barcode"
+          src="data:image/png;base64,<%= barcodeBase64 %>"
+          alt="Barcode"
+        />
+      </div>
+      <% } else if (labelSize === 'small') { %>
+      <div class="small-label-container">
+        <div class="small-lable">
+          <p>제 조 날 짜</p>
+          <p><%= manufactureDate.split('').join(' ') %></p>
+        </div>
+        <div class="small-lable">
+          <p>유 통 기 한</p>
+          <p><%= expiryDate.split('').join(' ') %></p>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>
