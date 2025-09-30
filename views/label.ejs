@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -27,7 +27,7 @@
                   h1, h3, p {
                     margin: 2px 0;
                   }
-                  h3 {
+                  h5 {
                     transform: rotate(270deg); /* 90도 회전 */
                     transform-origin: center center; /* 회전 중심점 지정 (기본값) */
                   }
@@ -47,8 +47,8 @@
                     display: flex;
                     flex-flow: column;
                   }
-                  .medium-label {
-                    margin-top: 5rem;
+      .small-label-barcode {
+        margin-top: 1rem;
         display: flex;
       }
     </style>
@@ -69,12 +69,15 @@
       />
       <% } else if (labelSize === 'medium') { %>
       <div class="medium-label">
-        <h3><%= productName %></h3>
-        <img
-          class="barcode"
-          src="data:image/png;base64,<%= barcodeBase64 %>"
-          alt="Barcode"
-        />
+        <h2><%= productName %></h3>
+        <p>
+          등록번호: 제IIIRAX0009호 제품명: 댕치킨 
+          종류 및 현태: 단미사료/혼합성-혼합제/큐브
+          성분량: 조단백질 36%이상,
+        </p>
+        <p>제조 일자</p>
+        <p>유통기한</p>
+        <p>제품수량</p>
       </div>
       <% } else if (labelSize === 'small') { %>
       <div class="small-label-container">
@@ -85,6 +88,240 @@
         <div class="small-lable">
           <p>유 통 기 한</p>
           <p><%= expiryDate.split('').join(' ') %></p>
+        </div>
+        <div class="small-label-barcode">
+          <h5><%= productName %></h5>
+          <img
+          class="barcode"
+          src="data:image/png;base64,<%= barcodeBase64 %>"
+          alt="Barcode"
+        />
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>라벨</title>
+    <style>
+      @page {
+        size: <%= labelSize === 'large' ? '100mm 100mm' : labelSize === 'medium' ? '80mm 60mm' : '50mm 30mm' %>;
+        margin: 0;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Nanum Gothic', sans-serif;
+        height: 100%;
+      }
+      .label-content {
+              width: 100%;
+              height: 100%;
+              justify-content: center; /* 수평 중앙 */
+              align-items: center;     /* 수직 중앙 */
+              text-align: center;
+            }
+      h1, h2, p {
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ---------- Large 전용 스타일 ---------- */
+      .label-large {
+      width: 100%;
+      height: 100%;
+      padding: 10px 14px;
+      box-sizing: border-box;
+      font-size: 9pt;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .large-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .large-title {
+      font-size: 16pt;
+      font-weight: bold;
+    }
+    .frozen-badge {
+      border: 1.5px solid #000;
+      border-radius: 6px;
+      padding: 4px;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 7pt;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .frozen-badge svg {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 2px;
+    }
+
+    .large-info p {
+      margin: 2px 0;
+      text-align: left;
+    }
+
+    .large-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .barcode-box {
+      text-align: center;
+    }
+    .barcode-box img {
+      width: 140px;
+      height: auto;
+    }
+    .date-box {
+      text-align: left;
+      font-size: 10pt;
+    }
+    .microwave-box {
+      text-align: center;
+      font-size: 8pt;
+    }
+    .microwave-box svg {
+      display: block;
+      width: 42px;
+      height: 28px;
+      margin: 0 auto 2px auto;
+    }
+
+      /* ---------- Medium 전용 스타일 ---------- */
+      .label-medium {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        text-align: left;
+      }
+      .medium-header {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 6px;
+      }
+      .medium-info {
+        font-size: 8pt;
+        line-height: 1.4;
+        margin-bottom: 4px;
+      }
+      h5 {
+                    transform: rotate(270deg); /* 90도 회전 */
+                    transform-origin: center center; /* 회전 중심점 지정 (기본값) */
+                  }
+      .small-label {
+                    display: flex;
+                    flex-flow: column;
+                  }
+                  .small-label-container {
+                    display: flex;
+                    flex-flow: column;
+                  }
+      .small-label-barcode {
+        margin-top: 1rem;
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="label-content">
+      <% if (labelSize === 'large') { %>
+        <div class="label-large">
+    <!-- 상단: 제품명 + 냉동 배지 -->
+    <div class="large-top">
+      <div class="large-title"><%= productName %></div>
+      <div class="frozen-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M32 8v48M8 32h48M16 16l32 32M48 16L16 48"/>
+        </svg>
+        냉동식품
+      </div>
+    </div>
+
+    <!-- 본문 -->
+    <div class="large-info">
+      <p>등록번호: 제IIIRAX0009호 / 제품명: <%= productName %></p>
+      <p>종류 및 형태: 단미사료 / 혼합성-혼합제 / 큐브</p>
+      <p>성분량: 조단백질 36% 이상, 조지방 25% 이하, 조회분 5% 이하, 조섬유 5% 이하, 수분 10% 이하</p>
+      <p>원료의 명칭: 쌀, 계란, 두부, 브로콜리, 당근, 닭가슴살, 단호박, 코코넛오일</p>
+      <p>실제중량: 50g</p>
+      <p>사료의 용도: 애완동물용</p>
+      <p>제조일자: 유통기한으로부터 12개월 전</p>
+      <p>주의사항: 반려동물 이외에는 급여하지 마십시오.</p>
+    </div>
+
+    <!-- 하단: 바코드 + 날짜 + 전자레인지 -->
+    <div class="large-bottom">
+      <div class="barcode-box">
+        <img src="data:image/png;base64,<%= barcodeBase64 %>" alt="Barcode" />
+        <div>8 800278 470831</div>
+      </div>
+      <div class="date-box">
+        <p>제조일자: <%= manufactureDate %></p>
+        <p>유통기한: <%= expiryDate %></p>
+        <p>제품수량: 10개</p>
+      </div>
+      <div class="microwave-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" fill="none" stroke="#000" stroke-width="2">
+          <rect x="2" y="8" width="52" height="32" rx="2"/>
+          <circle cx="58" cy="16" r="2"/>
+          <circle cx="58" cy="24" r="2"/>
+          <circle cx="58" cy="32" r="2"/>
+        </svg>
+        30초~2분
+      </div>
+    </div>
+  </div>
+
+      <% } else if (labelSize === 'medium') { %>
+      <div class="label-medium">
+        <h2 class="medium-header"><%= productName %></h2>
+        <p class="medium-info">
+          등록번호: 제IIIRAX0009호 / 제품명: 댕치킨<br />
+          종류 및 현태: 단미사료 / 혼합성-혼합제 / 큐브<br />
+          성분량: 조단백질 36% 이상
+        </p>
+        <p class="medium-info">제조일자: <%= manufactureDate %></p>
+        <p class="medium-info">유통기한: <%= expiryDate %></p>
+        <p class="medium-info">제품수량: 1개</p>
+      </div>
+
+      <% } else if (labelSize === 'small') { %>
+      <div class="small-label-container">
+        <div class="small-lable">
+          <p>제 조 날 짜</p>
+          <p><%= manufactureDate.split('').join(' ') %></p>
+        </div>
+        <div class="small-lable">
+          <p>유 통 기 한</p>
+          <p><%= expiryDate.split('').join(' ') %></p>
+        </div>
+        <div class="small-label-barcode">
+          <h5><%= productName %></h5>
+          <img
+            class="barcode"
+            src="data:image/png;base64,<%= barcodeBase64 %>"
+            alt="Barcode"
+          />
         </div>
       </div>
       <% } %>
